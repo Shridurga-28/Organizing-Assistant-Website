@@ -6,6 +6,8 @@ import {
   Share2, Mail, MapPin, Menu, X, PersonStanding, Palette as PaletteIcon
 } from "lucide-react";
 
+type PageKey = "home" | "products" | "themes" | "about";
+
 // ─────────────────────────── THEME CONSTANTS ──────────────────────────────
 
 const THEME_IMAGES = {
@@ -28,6 +30,7 @@ const THEME_IMAGES = {
     ]
   },
   bohemian: {
+    main: "https://lh3.googleusercontent.com/aida-public/AB6AXuDA5RVEQgW1Ik9y8KBDLxtR3rvITgdwi00ZjUXcZ1s-aQCEGBncl86hxcBN7OTvrE6RKJOcCy-ah59iOuTfuDAbgQZl6a-psIncBQQisXVwr2ow_Prt4Qxhy9gQSOnB8xekMwwg5sgSZRg5PagNSry_LJ5M4UIb0DOCFjE8ls6uHp1UamMW-ynAI5HNqLFY3IQIi0Iz8tC2-AQvIVMaKiv6pfp5XXv7C--DTe-dpX493tvvkgctbaKEKfW3D2LW3hX31SXbpwDnfQ",
     gallery: [
       "https://lh3.googleusercontent.com/aida-public/AB6AXuDQGaL6iSKAqZDq-m6vhYrsvUSLaTBy3YNPTV5m_JDPyn0VnTfEKjhLCAu7eMZ80r9zq5aU95x4pHqxTmZGMYYTpFqV_q_UyXou4CiibQiREpaZHKHiLJ7JGhy3CEX5xQfDKI9L1KPaVDpxhKEPmtU_ozIggnpdubwsS8GuXUxqEc5rEEf0Ze3X9VLDDR8n5FyoYpJdLs9BC9uyhJxS1xwUchBMKnBYOUwd67BnTCGULUGSr0faAEFbbBCn-mdzTPbI43Z4fpV23Q",
       "https://lh3.googleusercontent.com/aida-public/AB6AXuDirFwsOZ9kzw7Bsezz_XZHJY-uhEEYnraGg-pF1oh5_DN2g10llos4XeInogpmQGSPndiWxFHAPmgCkOj5-oFLGe5AJ3MLfmixhI-WdDdCfROJ4LziUvWqAt5YhQ1NujSnugukAOc2yvKNu3hD6fp0HyqlCANuQO0wiqMFCVxJlHkU1IF6mNGqddW4zHdsIjXRHNmKPOx33OTX1rDsVsYi-JK12xExnCjQBTCO-w26n-hyRwMoXPoQvxcLiLUL0ryW8cHGk07eYA",
@@ -48,10 +51,10 @@ const PRODUCTS = [
 
 // ─────────────────────────── SHARED COMPONENTS ────────────────────────────
 
-function Navbar({ activePage, setPage }) {
+function Navbar({ activePage, setPage }: { activePage: PageKey; setPage: (page: PageKey) => void }) {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const links = ["Home", "Products", "Themes", "About"];
-  const pageMap = { Home: "home", Products: "products", Themes: "themes", About: "about" };
+  const links = ["Home", "Products", "Themes", "About"] as const;
+  const pageMap: Record<(typeof links)[number], PageKey> = { Home: "home", Products: "products", Themes: "themes", About: "about" };
 
   return (
     <nav className="sticky top-0 w-full z-50 bg-white/95 backdrop-blur-md border-b border-stone-100 shadow-sm">
@@ -130,7 +133,7 @@ function Navbar({ activePage, setPage }) {
   );
 }
 
-function SharedFooter({ setPage }) {
+function SharedFooter({ setPage }: { setPage: (page: PageKey) => void }) {
   return (
     <footer className="bg-stone-50 border-t border-stone-200">
       <div className="max-w-7xl mx-auto px-6 md:px-16 py-16 grid grid-cols-1 md:grid-cols-4 gap-10">
@@ -151,7 +154,7 @@ function SharedFooter({ setPage }) {
           <ul className="space-y-3">
             {[["Home","home"],["Products","products"],["Themes","themes"],["About","about"]].map(([label, page]) => (
               <li key={page}>
-                <button onClick={() => setPage(page)} className="text-stone-500 hover:text-stone-800 text-sm transition-colors">{label}</button>
+                <button onClick={() => setPage(page as PageKey)} className="text-stone-500 hover:text-stone-800 text-sm transition-colors">{label}</button>
               </li>
             ))}
           </ul>
@@ -169,7 +172,6 @@ function SharedFooter({ setPage }) {
           <div className="flex gap-3 mb-6">
             {[Share2, Mail, MapPin].map((Icon, i) => (
               <a key={i} href="#" className="p-2 bg-white rounded-full border border-stone-200 text-stone-500 hover:text-white transition-all"
-                style={{ '--hover-bg': 'var(--primary)' } as React.CSSProperties}
                 onMouseEnter={e => { e.currentTarget.style.background = 'var(--primary)'; e.currentTarget.style.borderColor = 'var(--primary)'; }}
                 onMouseLeave={e => { e.currentTarget.style.background = 'white'; e.currentTarget.style.borderColor = '#e7e5e4'; }}
               >
@@ -186,7 +188,7 @@ function SharedFooter({ setPage }) {
 
 // ─────────────────────────── HOME PAGE ────────────────────────────────────
 
-function HeroSection({ setPage }) {
+function HeroSection({ setPage }: { setPage: (page: PageKey) => void }) {
   return (
     <section className="relative w-full overflow-hidden pt-12 pb-24 md:pb-32">
       <div className="max-w-7xl mx-auto px-6 md:px-16 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -245,7 +247,7 @@ function HeroSection({ setPage }) {
   );
 }
 
-function PhilosophySection({ setPage }) {
+function PhilosophySection({ setPage }: { setPage: (page: PageKey) => void }) {
   return (
     <section className="py-24" style={{ background: "rgba(249,249,255,0.5)" }}>
       <div className="max-w-7xl mx-auto px-6 md:px-16">
@@ -326,13 +328,14 @@ function PhilosophySection({ setPage }) {
 }
 
 function MoodSwitcher() {
-  const [activeMood, setActiveMood] = useState("Calm");
+  type MoodId = "Calm" | "Energetic" | "Professional";
+  const [activeMood, setActiveMood] = useState<MoodId>("Calm");
   const MOODS = [
     { id: "Calm", icon: Flower2 },
     { id: "Energetic", icon: Zap },
     { id: "Professional", icon: Briefcase },
-  ];
-  const moodColor = { Calm: "var(--secondary)", Energetic: "var(--primary)", Professional: "var(--tertiary)" };
+  ] as const;
+  const moodColor: Record<MoodId, string> = { Calm: "var(--secondary)", Energetic: "var(--primary)", Professional: "var(--tertiary)" };
 
   return (
     <section className="py-24 overflow-hidden">
@@ -405,7 +408,7 @@ function HomeCTA() {
   );
 }
 
-function HomePage({ setPage }) {
+function HomePage({ setPage }: { setPage: (page: PageKey) => void }) {
   return (
     <div>
       <HeroSection setPage={setPage} />
@@ -509,12 +512,24 @@ function ProductsPage() {
 
 // ─────────────────────────── THEMES PAGE ──────────────────────────────────
 
-function ThemeSection({ badge, title, description, features, mainImage, images, layout, bgColor = "bg-white" }) {
+type ThemeSectionProps = {
+  id: string;
+  badge: string;
+  title: string;
+  description: string;
+  features: string[];
+  mainImage?: string;
+  images: string[];
+  layout: "modern" | "classic" | "bohemian";
+  bgColor?: string;
+};
+
+function ThemeSection({ id, badge, title, description, features, mainImage, images, layout, bgColor = "bg-white" }: ThemeSectionProps) {
   const isReverse = layout === "classic";
   const accentColor = layout === "modern" ? "var(--secondary)" : layout === "classic" ? "var(--primary)" : "var(--tertiary)";
 
   return (
-    <section className={`py-20 md:py-32 overflow-hidden ${bgColor}`}>
+    <section id={id} className={`py-20 md:py-32 overflow-hidden ${bgColor}`}>
       <div className="max-w-7xl mx-auto px-6 md:px-16">
         <div className={`flex flex-col ${isReverse ? "md:flex-row-reverse" : "md:flex-row"} gap-12 md:gap-24 items-center mb-16 md:mb-24`}>
           <motion.div initial={{ opacity: 0, x: isReverse ? 40 : -40 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="flex-1">
@@ -582,7 +597,7 @@ function ThemeSection({ badge, title, description, features, mainImage, images, 
             {images.map((img, i) => (
               <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 * i }}
                 className={`rounded-3xl overflow-hidden shadow-xl ${i % 2 === 0 ? "h-[80%]" : "h-[80%] mt-[20%]"}`}>
-                <img src={img} className="w-full h-full object-cover" alt={`Boho ${i + 1}`} />
+                <img src={img} className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" alt={`Boho ${i + 1}`} />
               </motion.div>
             ))}
           </div>
@@ -606,27 +621,28 @@ function ThemesPage() {
         </motion.p>
       </header>
 
-      <ThemeSection badge="Modern" title="Sleek Minimalism & Function"
+      <ThemeSection id="modern" badge="Modern" title="Sleek Minimalism & Function"
         description="The Modern theme celebrates geometric precision and the beauty of industrial materials. It is a philosophy of 'less is more', where every piece serves a purpose and negative space is treated as a luxury."
         features={["Monochromatic bases with bold primary accents.", "Natural materials like polished concrete and dark oak.", "Clean horizontal lines and architectural lighting."]}
         mainImage={THEME_IMAGES.modern.main} images={THEME_IMAGES.modern.bento} layout="modern" bgColor="bg-stone-50" />
 
-      <ThemeSection badge="Classic" title="Timeless Heritage & Elegance"
+      <ThemeSection id="classic" badge="Classic" title="Timeless Heritage & Elegance"
         description="Classic design is an homage to symmetry and refined tradition. It features rich color palettes, ornate details, and a sense of permanence that transcends passing trends."
         features={["Velvet upholstery and intricate textile patterns.", "Dark walnut and mahogany furniture with carved details.", "Balanced, symmetrical room layouts with a focal fireplace."]}
         mainImage={THEME_IMAGES.classic.main} images={THEME_IMAGES.classic.gallery} layout="classic" bgColor="bg-white" />
 
-      <ThemeSection badge="Bohemian" title="Eclectic Spirit & Comfort"
-      description="The Bohemian theme is a free-spirited mix of cultures and artistic expressions. It prioritizes comfort over convention, filling spaces with plants, textiles, and personal treasures."
-      features={["Layered rugs and floor pillows for a relaxed vibe.", "Vibrant greenery and macramé wall hangings.", "Warm, earthy tones mixed with saturated jewel colors."]}
-      images={THEME_IMAGES.bohemian.gallery} layout="bohemian" bgColor="bg-stone-50" mainImage={undefined} />
+      <ThemeSection id="bohemian" badge="Bohemian" title="Eclectic Spirit & Comfort"
+        description="The Bohemian theme is a free-spirited mix of cultures and artistic expressions. It prioritizes comfort over convention, filling spaces with plants, textiles, and personal treasures."
+        features={["Layered rugs and floor pillows for a relaxed vibe.", "Vibrant greenery and macramé wall hangings.", "Warm, earthy tones mixed with saturated jewel colors."]}
+        mainImage={THEME_IMAGES.bohemian.main}
+        images={THEME_IMAGES.bohemian.gallery} layout="bohemian" bgColor="bg-stone-50" />
     </div>
   );
 }
 
 // ─────────────────────────── ABOUT PAGE ───────────────────────────────────
 
-function AboutPage({ setPage }) {
+function AboutPage({ setPage }: { setPage: (page: PageKey) => void }) {
   return (
     <div>
       {/* Hero */}
@@ -745,12 +761,11 @@ function AboutPage({ setPage }) {
               Join the Team
             </button>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
             {[
-              { name: "Elena Rivera", role: "Founder & Lead Designer", img: "https://lh3.googleusercontent.com/aida-public/AB6AXuAwGmtuTnSaIQKLvM7ilIJlivoA0pOH8_8UrcvBJJSyHe4VfVdU0vNyzSr7SdtpkrDaYZdR602egn8bz4fUY3uI3Ea_1oCudQLqhL-iSeNwvoM_khgaiGWp1jRxK2zOnxTA6Q21DZ66fyZqLWFzAcbcF5SRDxQAR_Qf4SP6A_dd4O-h4mLBMHzlKQHLIkQlGW2OKcoDDcMqNMBMrVbHQOk9brKuJT9XUTA1gma0Znj-quobHptCQfSm8_WPYWnTfJWYAiRMHvQdYA" },
-              { name: "Marcus Chen", role: "Architectural Strategist", img: "https://lh3.googleusercontent.com/aida-public/AB6AXuCVY8y4d4nRy_XAJoWMaXAB_RrfluvkHOfCelUt8iu0gavoVR1md1qiQO2LaWaT3V2MqLMdyJJC35LUKu-I23ScE34ny4lHHpAjuymfulPmLCmW_Nu1iU2quB2EC0hPb4EhIyHV3FMjm4AlmMy8yNMJ9KSZZ21RRd3oZ5zxx8IBIG7p2Up2F_eaEOcjDN_q4maXjb-JLVehZbDLX9-g88V54fYPiFTOTq1LvxJjtmGbMjSX7jXzt_vddfDp24NQfLvIJGldokuXIw" },
-              { name: "Sarah Jenkins", role: "Mood & Texture Specialist", img: "https://lh3.googleusercontent.com/aida-public/AB6AXuCNSGRZkSXC76GlgJiVF2j51GTy-pUZ2BT6oguLe-CJBdEE79wdU2doNbl5S4wnxBJ509JnJf1coybdwtqYsaCaaNSuljebcxq96z74huN4lhnAU6cS2gPKYUyfsPIRGF8Bactp8Y9Ey9RGOJvWCg7ybpQtpVf3jA6tJvjdSYRoeDZNPFoEwiWxn58nnrzdDNDhSqP2fCBBSLu59awoYSagUiQ9HzGmyQYnNOeHDyz4Ze0LtAhXatL5JgNIpfQVRic78Vb3SVjmig" },
-              { name: "Julian Voss", role: "Product Innovation", img: "https://lh3.googleusercontent.com/aida-public/AB6AXuAHzI7XCBt_zvUVtPTYG7X9biJQga-ip_OP4zX83lyNrGSU4Tr7Cqg1bQ_ZHLoBozQ6QB_Q0MgkE8SypiiloJIb9S4It4KDQ8WknB4ih7OY7JUVw6guUYw-q5aUK0qsUygIz7Br0U1EQI3WVIf7BEn28j_8qMX8gUJuGnhQG1amyKBAcHwSmD6DjnAw1PwKWfYq9v-bn-FvsfVfyR_-rQuwX2gxQIo8KG1JdQMevR703uDwkxHDEP8_AfZjI0BIP6tmvrxlOtXPXg" }
+              { name: "Shridurga K P", role: "Founder, Designer & Developer", img: "https://drive.google.com/uc?export=view&id=1u2-5in_l3vFkE0y9_C-ITcV6jUwFAR-5" },
+              { name: "Harini S", role: "Co-Founder & Developer", img: "https://drive.google.com/uc?export=view&id=1IUZfS5VbXUfYqaIiY5fSBx1ZTAvH3OQ9" },
+              { name: "Nivedhitha S", role: "Co-Founder & Developer", img: "https://drive.google.com/uc?export=view&id=1VkQZu7EAcC3OKwCIUKufthuxlyLLUF4x" }
             ].map((person, i) => (
               <motion.div key={i} whileHover={{ y: -10 }} className="group">
                 <div className="aspect-[3/4] rounded-2xl overflow-hidden mb-6 shadow-md group-hover:shadow-2xl transition-all duration-500">
@@ -820,7 +835,7 @@ const CSS_VARS = `
 `;
 
 export default function App() {
-  const [page, setPage] = useState("home");
+  const [page, setPage] = useState<PageKey>("home");
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
